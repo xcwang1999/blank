@@ -1,0 +1,7 @@
+#ifndef PROJECT_TEMPLATE_INCLUDE_HELLO_HELLO_H_
+#define PROJECT_TEMPLATE_INCLUDE_HELLO_HELLO_H_
+
+void printHello();
+int factorial(int n);
+
+#endif  // PROJECT_TEMPLATE_INCLUDE_HELLO_HELLO_H_

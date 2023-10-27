@@ -1,0 +1,44 @@
+# IDE
+.vscode/
+.idea/
+
+# CMake
+build
+cmake-build-*
+
+# Fortran module files
+*.mod
+*.smod
+
+# Executables and libraries
+bin/
+lib/
+*.exe
+*.out
+*.app
+*.lai
+*.la
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+
+# clangd
+.cache/
+
+# log for perf
+log
+tmp
+*.rdb
+*.svg
+perf/
+perf.data*
+*.data
+*.perf
+*.folded
+palette.map
+*.ncu-rep
+
+# public/index.html for httpd
+public/

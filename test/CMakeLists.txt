@@ -1,0 +1,6 @@
+if(BUILD_UNIT_TEST)
+    add_subdirectory(unit)
+endif()
+if(BUILD_BENCHMARK)
+    add_subdirectory(benchmark)
+endif()

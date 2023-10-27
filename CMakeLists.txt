@@ -1,0 +1,60 @@
+cmake_minimum_required(VERSION 3.25)
+project(TAMPLATE LANGUAGES CXX)
+
+option(BUILD_UNIT_TEST "Enable unit test." off)
+option(BUILD_BENCHMARK "Enable benchmark." off)
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(CUDAToolkit REQUIRED)
+if(CUDAToolkit_FOUND)
+    message(STATUS "CUDAToolkit found.")
+    message(STATUS "CUDAToolkit include directories: ${CUDAToolkit_INCLUDE_DIRS}")
+    message(STATUS "CUDAToolkit libraries: ${CUDAToolkit_LIBRARY}")
+    enable_language(CUDA)
+    set(CMAKE_CUDA_STANDARD "${CMAKE_CXX_STANDARD}")
+    set(CMAKE_CUDA_STANDARD_REQUIRED "${CMAKE_CXX_STANDARD_REQUIRED}")
+    set(CMAKE_CUDA_ARCHITECTURES native)
+else()
+    message(FATAL_ERROR "CUDAToolkit not found!")
+endif()
+
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -O0 -g")
+set(CMAKE_CUDA_FLAGS_DEBUG "${CMAKE_CUDA_FLAGS} -O0 -g -lineinfo")
+
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+    message(STATUS "Setting build type to 'Release'.")
+else()
+    message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+endif()
+
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    message(STATUS "Compiler flags for CXX Release build: ${CMAKE_CXX_FLAGS_RELEASE}")
+    message(STATUS "Compiler flags for CUDA Release build: ${CMAKE_CUDA_FLAGS_RELEASE}")
+elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message(STATUS "Compiler flags for CXX Debug build: ${CMAKE_CXX_FLAGS_DEBUG}")
+    message(STATUS "Compiler flags for CUDA Debug build: ${CMAKE_CUDA_FLAGS_DEBUG}")
+else()
+    message(STATUS "Unknown build type: ${CMAKE_BUILD_TYPE}")
+endif()
+
+if(NOT DEFINED BUILD_SHARED_LIBS)
+    set(BUILD_SHARED_LIBS off)
+endif()
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+
+add_subdirectory(src)
+add_subdirectory(example)
+
+set(_saved_CMAKE_MESSAGE_LOG_LEVEL ${CMAKE_MESSAGE_LOG_LEVEL})
+set(CMAKE_MESSAGE_LOG_LEVEL ERROR)
+add_subdirectory(third-party/googletest)
+add_subdirectory(third-party/benchmark)
+set(CMAKE_MESSAGE_LOG_LEVEL ${_saved_CMAKE_MESSAGE_LOG_LEVEL})
+
+add_subdirectory(test)

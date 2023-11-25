@@ -1,6 +1,6 @@
 set(MAIN_LIBRARY mylibrary)
 
-set(MY_LIBRARIES "")
+set(SUBLIBRARIES "")
 
 macro(add_sublibrary SUBLIBRARY)
     file(GLOB_RECURSE srcs CONFIGURE_DEPENDS 
@@ -12,14 +12,14 @@ macro(add_sublibrary SUBLIBRARY)
         ${srcs}
     )
     add_library(${MAIN_LIBRARY}::${SUBLIBRARY} ALIAS ${SUBLIBRARY})
-    list(APPEND MY_LIBRARIES ${SUBLIBRARY})
-    set(MY_LIBRARIES "${MY_LIBRARIES}" PARENT_SCOPE)
+    list(APPEND SUBLIBRARIES ${SUBLIBRARY})
+    set(SUBLIBRARIES "${SUBLIBRARIES}" PARENT_SCOPE)
 endmacro()
 
 add_subdirectory(hello)
 
 add_library(${MAIN_LIBRARY} INTERFACE)
-message(STATUS "MY_LIBRARIES: ${MY_LIBRARIES}")
+message(STATUS "SUBLIBRARIES: ${SUBLIBRARIES}")
 target_link_libraries(${MAIN_LIBRARY} INTERFACE
-    ${MY_LIBRARIES}
+    ${SUBLIBRARIES}
 )
